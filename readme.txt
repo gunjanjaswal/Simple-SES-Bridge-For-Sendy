@@ -3,7 +3,7 @@ Contributors: gunjanjaswal
 Tags: sendy, newsletter, email, amazon-ses, marketing
 Requires at least: 5.8
 Tested up to: 6.9
-Stable tag: 1.0.2
+Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://buymeacoffee.com/gunjanjaswal
@@ -99,23 +99,9 @@ This runs every 5 minutes to automatically process queued campaigns.
 
 == Changelog ==
 
-= 1.0.2 =
-*   Fix: Resolved "cURL error 28: SSL connection timeout" by increasing API timeout to 60s.
-*   Fix: Disabled strict SSL verification for better compatibility with self-hosted Sendy instances.
-
-= 1.0.1 =
-*   Feature: Custom Footer Text with HTML support in a highlighted box.
-*   Feature: Footer logo now automatically links to the site homepage.
-*   Tweak: Improved footer link visibility (defaulting to blue).
-
 = 1.0.0 =
 *   Initial Release.
 *   Feature: Visual Newsletter Builder with drag-and-drop post selection.
-*   Feature: Hero banner with customizable image upload.
-*   Feature: Two layout options: List view and Grid (2-column) view.
-*   Feature: Responsive email design with mobile-optimized stacking.
-*   Feature: Multi-list support with checkboxes (all lists selected by default).
-*   Feature: Sendy API Integration (Draft/Send/Schedule campaigns) with SSL fix for timeouts.
 *   Feature: Hero banner with customizable image upload.
 *   Feature: Two layout options: List view and Grid (2-column) view.
 *   Feature: Responsive email design with mobile-optimized stacking.
@@ -130,9 +116,12 @@ This runs every 5 minutes to automatically process queued campaigns.
 *   Feature: Test email functionality to preview campaigns before sending.
 *   Feature: Customizable footer with logo (auto-links to site home), copyright, social media links.
 *   Feature: Custom Footer Text with HTML support in a highlighted box.
+*   Feature: Optional "Article Excerpts" support in layout.
 *   Fix: Properly parse pipe-separated list format (List Name|List ID) to extract IDs.
 *   Fix: Schedule datetime picker with proper z-index for calendar visibility.
 *   Fix: Reply-to email correctly passed for all campaign types.
+*   Fix: Resolved "cURL error 28: SSL connection timeout".
+*   Fix: Disabled strict SSL verification for better compatibility with self-hosted Sendy instances.
 *   Security: All inputs properly sanitized and validated.
 *   Security: Using wp_safe_redirect() for secure redirects.
 *   Security: Timezone-aware datetime formatting with wp_date().

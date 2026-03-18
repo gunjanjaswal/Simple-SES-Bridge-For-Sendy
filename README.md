@@ -1,6 +1,6 @@
 # 📧 Simple SES Bridge for Sendy
 
-![Version](https://img.shields.io/badge/version-1.0.2-blue.svg) ![WordPress](https://img.shields.io/badge/WordPress-5.8%2B-aaaaaa.svg) ![License](https://img.shields.io/badge/license-GPLv2-green.svg)
+![Version](https://img.shields.io/badge/version-1.0.0-blue.svg) ![WordPress](https://img.shields.io/badge/WordPress-5.8%2B-aaaaaa.svg) ![License](https://img.shields.io/badge/license-GPLv2-green.svg)
 
 **Connect WordPress to Sendy with style.**
 Create beautiful, responsive newsletters directly from your WordPress posts and send them via your Sendy installation (Amazon SES).
@@ -172,22 +172,16 @@ This automatically processes queued campaigns every 5 minutes.
  
  ## 📋 Changelog
  
- ### v1.0.3
- *   **Feature:** Added optional "Article Excerpts" feature in the drag-and-drop builder.
- *   **Docs:** Updated GitHub installation documentation.
-
- ### v1.0.2
- *   **Fix:** Resolved "cURL error 28: SSL connection timeout" by increasing API timeout to 60s.
- *   **Fix:** Disabled strict SSL verification for self-hosted Sendy compatibility.
- 
- ### v1.0.1
- *   **Feature:** Custom Footer Text context with highlighted box.
- *   **Feature:** Footer logo auto-link to homepage.
- 
  ### v1.0.0
  *   **Initial Release**
  *   **Feature:** Visual Newsletter Builder with drag-and-drop.
  *   **Feature:** Responsive Grid Layout (Desktop/Mobile).
+ *   **Feature:** Optional "Article Excerpts" feature in the drag-and-drop builder.
+ *   **Feature:** Custom Footer Text context with highlighted box.
+ *   **Feature:** Footer logo auto-link to homepage.
+ *   **Fix:** Resolved "cURL error 28: SSL connection timeout".
+ *   **Fix:** Disabled strict SSL verification for self-hosted Sendy compatibility.
+ *   **Docs:** Updated GitHub installation documentation.
  
  ---
  
