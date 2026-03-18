@@ -339,7 +339,8 @@ jQuery(document).ready(function ($) {
                 <div style="background-color: #ffffff; border-radius: 12px; border: 1px solid #e5e7eb; text-align: center;">
                     ${currentBanner ? `<img src="${currentBanner}" style="width: 100%; height: auto; display: block; border-top-left-radius: 12px; border-top-right-radius: 12px;" />` : ''}
                     <div style="padding: 22px;">
-                        <h2 style="margin-top: 0; color: #0f172a; text-align: center;">${heroPost.title}</h2>
+                        <h2 style="margin-top: 0; margin-bottom: ${settings.show_article_excerpt == '1' ? '12px' : '20px'}; color: #0f172a; text-align: center;">${heroPost.title}</h2>
+                        ${settings.show_article_excerpt == '1' && heroPost.excerpt ? `<p style="color: #475569; font-size: 15px; line-height: 1.6; text-align: center; margin-top: 0; margin-bottom: 22px;">${heroPost.excerpt}...</p>` : ''}
 
                         <table border="0" cellpadding="0" cellspacing="0" style="margin: auto;">
                             <tr>
@@ -437,7 +438,7 @@ jQuery(document).ready(function ($) {
         // Image is now auto-height (proportional) and centered, max-width reduced to 250px
         return `
         <td class="responsive-td" style="padding:10px; vertical-align: top;" valign="top" width="50%">
-            <table class="sssb-card-table" cellpadding="0" cellspacing="0" style="border:1px solid #e2e8f0; border-radius:12px; width: 100%; height: 480px; table-layout: fixed; background-color: #ffffff;">
+            <table class="sssb-card-table" cellpadding="0" cellspacing="0" style="border:1px solid #e2e8f0; border-radius:12px; width: 100%; height: ${settings.show_article_excerpt == '1' ? '540px' : '480px'}; table-layout: fixed; background-color: #ffffff;">
                 <tbody>
                     <tr>
                         <td align="center" valign="middle" style="height: 220px; vertical-align: middle; padding: 0; background-color: #f1f5f9; border-top-left-radius:12px; border-top-right-radius:12px;">
@@ -449,7 +450,8 @@ jQuery(document).ready(function ($) {
                     </tr>
                     <tr>
                         <td style="padding:15px; text-align:center; vertical-align: top; height: auto;" valign="top">
-                            <h3 style="font-size:16px; margin:0 0 12px; color:#0f172a; line-height: 1.4;">${post.title}</h3>
+                            <h3 style="font-size:16px; margin:0 0 ${settings.show_article_excerpt == '1' ? '8px' : '12px'}; color:#0f172a; line-height: 1.4;">${post.title}</h3>
+                            ${settings.show_article_excerpt == '1' && post.excerpt ? `<p style="font-size:13px; color:#475569; line-height:1.5; margin:0 0 15px;">${post.excerpt}...</p>` : ''}
                             
                             <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="margin:auto;">
                                 <tbody>

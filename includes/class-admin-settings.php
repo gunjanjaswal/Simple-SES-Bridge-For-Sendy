@@ -120,6 +120,18 @@ class SSSB_Admin_Settings
             )
         );
 
+        add_settings_field(
+            'show_article_excerpt',
+            __('Show Article Excerpt', 'simple-ses-bridge-for-sendy'),
+            array($this, 'render_checkbox_field'),
+            'simple_sendy_bridge',
+            'sssb_main_section',
+            array(
+                'field' => 'show_article_excerpt',
+                'desc' => __('Show a short excerpt of the article between the title and the "Read More" button in the newsletter.', 'simple-ses-bridge-for-sendy')
+            )
+        );
+
         // --- Footer & Social Settings ---
         
         add_settings_section(
@@ -191,6 +203,13 @@ class SSSB_Admin_Settings
         } else {
             $new_input['trigger_cron'] = '';
         }
+        
+        if (isset($input['show_article_excerpt'])) {
+            $new_input['show_article_excerpt'] = '1';
+        } else {
+            $new_input['show_article_excerpt'] = '';
+        }
+        
         return $new_input;
     }
 

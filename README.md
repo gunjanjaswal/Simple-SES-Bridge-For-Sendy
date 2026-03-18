@@ -13,6 +13,7 @@ Create beautiful, responsive newsletters directly from your WordPress posts and 
 *   **Drag-and-Drop Post Selection:** Search and add posts with a single click.
 *   **Hero + Grid Layout:** First post displays as a featured "Hero" card, subsequent posts in a **2-column grid** (desktop).
 *   **Two Layout Options:** Choose between List view (single column) or Grid view (2-column).
+*   **Article Excerpts:** Optional setting to show short article text before the "Read More" button.
 *   **Live Preview:** See exactly what your email will look like as you build it.
 *   **Banner Upload:** Add custom hero banners via WordPress Media Library.
 
@@ -53,9 +54,28 @@ Create beautiful, responsive newsletters directly from your WordPress posts and 
 
 ## 🚀 Installation
 
-1.  **Download** the plugin zip file.
-2.  **Upload** to your WordPress site via *Plugins > Add New > Upload Plugin*.
-3.  **Activate** the plugin.
+### 💻 Via WordPress Dashboard
+
+1.  **Download** the latest plugin `.zip` file from the [Releases page](https://github.com/gunjanjaswal/Simple-SES-Bridge-for-Sendy/releases) or the `Code > Download ZIP` button on GitHub.
+2.  Go to **Plugins > Add New** in your WordPress admin panel.
+3.  Click **Upload Plugin** at the top.
+4.  Choose the downloaded `.zip` file and click **Install Now**.
+5.  Click **Activate Plugin**.
+
+### 🔧 Via Git (For Developers)
+
+1.  Open your terminal and navigate to your WordPress plugins directory:
+    ```bash
+    cd wp-content/plugins/
+    ```
+2.  Clone the repository:
+    ```bash
+    git clone https://github.com/gunjanjaswal/Simple-SES-Bridge-for-Sendy.git simple-ses-bridge-for-sendy
+    ```
+3.  Activate the plugin through the **Plugins** menu in WordPress.
+
+### ⚙️ Final Setup (Both Methods)
+
 4.  **Configure** your Sendy details in *Settings > Simple Sendy Bridge*:
     *   Sendy Installation URL
     *   API Key
