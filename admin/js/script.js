@@ -434,6 +434,7 @@ jQuery(document).ready(function ($) {
     }
 
     function renderGridItem(post) {
+        const settings = sssb_ajax.settings || {};
         // Enforce consistent card height (e.g., 440px) to keep rows even
         // Image is now auto-height (proportional) and centered, max-width reduced to 250px
         return `
