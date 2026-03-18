@@ -172,6 +172,11 @@ This automatically processes queued campaigns every 5 minutes.
  
  ## 📋 Changelog
  
+ ### v1.0.3
+ *   **Feature:** Added optional "Article Excerpts" feature in the drag-and-drop builder.
+ *   **Feature:** Added Campaign Stats columns (Open Rate, Clicks, Unsubs) with manual entry meta boxes.
+ *   **Docs:** Updated GitHub installation documentation.
+
  ### v1.0.2
  *   **Fix:** Resolved "cURL error 28: SSL connection timeout" by increasing API timeout to 60s.
  *   **Fix:** Disabled strict SSL verification for self-hosted Sendy compatibility.
