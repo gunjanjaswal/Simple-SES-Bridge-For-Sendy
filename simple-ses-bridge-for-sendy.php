@@ -3,7 +3,7 @@
  * Plugin Name: Simple SES Bridge for Sendy
  * Plugin URI:  https://github.com/gunjanjaswal/Simple-SES-Bridge-for-Sendy
  * Description: Connects WordPress to Sendy (via Amazon SES) to create and send newsletters from your content.
- * Version:     1.0.4
+ * Version:     1.0.5
  * Author:      Gunjan Jaswal
  * Author URI:  https://gunjanjaswal.me
  * License:     GPL-2.0+
@@ -18,7 +18,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants.
-define('SSSB_VERSION', '1.0.4');
+define('SSSB_VERSION', '1.0.5');
 define('SSSB_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('SSSB_PLUGIN_URL', plugin_dir_url(__FILE__));
 
@@ -122,61 +122,11 @@ class SSSB_Core
         // Add custom columns
         add_filter('manage_sssb_campaign_posts_columns', array($this, 'add_campaign_columns'));
         add_action('manage_sssb_campaign_posts_custom_column', array($this, 'manage_campaign_columns'), 10, 2);
-
-        // Add meta boxes
-        add_action('add_meta_boxes', array($this, 'add_stats_meta_box'));
-        add_action('save_post_sssb_campaign', array($this, 'save_stats_meta_box'));
-    }
-
-    public function add_stats_meta_box() {
-        add_meta_box(
-            'sssb_campaign_stats',
-            __('Campaign Statistics (Manual Entry)', 'simple-ses-bridge-for-sendy'),
-            array($this, 'render_stats_meta_box'),
-            'sssb_campaign',
-            'side',
-            'default'
-        );
-    }
-
-    public function render_stats_meta_box($post) {
-        wp_nonce_field('sssb_save_stats', 'sssb_stats_nonce');
-        $opens = get_post_meta($post->ID, '_sssb_opens', true);
-        $unsubs = get_post_meta($post->ID, '_sssb_unsubs', true);
-        $clicks = get_post_meta($post->ID, '_sssb_clicks', true);
-
-        echo '<p><label for="sssb_opens">' . __('Open Rate (% or count):', 'simple-ses-bridge-for-sendy') . '</label><br>';
-        echo '<input type="text" id="sssb_opens" name="sssb_opens" value="' . esc_attr($opens) . '" style="width:100%;"></p>';
-
-        echo '<p><label for="sssb_clicks">' . __('Clicks/CTR:', 'simple-ses-bridge-for-sendy') . '</label><br>';
-        echo '<input type="text" id="sssb_clicks" name="sssb_clicks" value="' . esc_attr($clicks) . '" style="width:100%;"></p>';
-
-        echo '<p><label for="sssb_unsubs">' . __('Unsubscribed:', 'simple-ses-bridge-for-sendy') . '</label><br>';
-        echo '<input type="text" id="sssb_unsubs" name="sssb_unsubs" value="' . esc_attr($unsubs) . '" style="width:100%;"></p>';
-    }
-
-    public function save_stats_meta_box($post_id) {
-        if (!isset($_POST['sssb_stats_nonce']) || !wp_verify_nonce($_POST['sssb_stats_nonce'], 'sssb_save_stats')) {
-            return;
-        }
-        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
-            return;
-        }
-        if (!current_user_can('edit_post', $post_id)) {
-            return;
-        }
-
-        if (isset($_POST['sssb_opens'])) update_post_meta($post_id, '_sssb_opens', sanitize_text_field($_POST['sssb_opens']));
-        if (isset($_POST['sssb_clicks'])) update_post_meta($post_id, '_sssb_clicks', sanitize_text_field($_POST['sssb_clicks']));
-        if (isset($_POST['sssb_unsubs'])) update_post_meta($post_id, '_sssb_unsubs', sanitize_text_field($_POST['sssb_unsubs']));
     }
 
     public function add_campaign_columns($columns) {
         $columns['sssb_status'] = __('Status', 'simple-ses-bridge-for-sendy');
         $columns['sssb_scheduled'] = __('Scheduled For', 'simple-ses-bridge-for-sendy');
-        $columns['sssb_opens'] = __('Open Rate', 'simple-ses-bridge-for-sendy');
-        $columns['sssb_clicks'] = __('Clicks', 'simple-ses-bridge-for-sendy');
-        $columns['sssb_unsubs'] = __('Unsubs', 'simple-ses-bridge-for-sendy');
         $columns['sssb_error'] = __('Error', 'simple-ses-bridge-for-sendy');
         return $columns;
     }
@@ -201,21 +151,6 @@ class SSSB_Core
                 } else {
                     echo '-';
                 }
-                break;
-
-            case 'sssb_opens':
-                $opens = get_post_meta($post_id, '_sssb_opens', true);
-                echo $opens ? esc_html($opens) : '-';
-                break;
-
-            case 'sssb_clicks':
-                $clicks = get_post_meta($post_id, '_sssb_clicks', true);
-                echo $clicks ? esc_html($clicks) : '-';
-                break;
-
-            case 'sssb_unsubs':
-                $unsubs = get_post_meta($post_id, '_sssb_unsubs', true);
-                echo $unsubs ? esc_html($unsubs) : '-';
                 break;
 
             case 'sssb_error':
