@@ -121,6 +121,17 @@ Create beautiful, responsive newsletters directly from your WordPress posts and 
    * * * * * curl https://yourdomain.com/wp-cron.php?doing_wp_cron >/dev/null 2>&1
    ```
 
+### How to Use Campaign Statistics (Open Rates, Clicks)?
+
+Because the official Sendy API does not officially return a unique Campaign ID or have a designated metrics endpoint upon campaign creation, **these statistics cannot be pulled automatically by WordPress**. 
+
+**To utilize the statistics columns:**
+1. Navigate to your **Campaigns** list in WordPress.
+2. Click to edit any previously sent campaign.
+3. On the right-hand sidebar, locate the **Campaign Statistics (Manual Entry)** meta box.
+4. Manually type your Open Rate, Clicks, and Unsubscribes from your Sendy dashboard into the fields.
+5. Click **Update**. These numbers will now be neatly displayed in your main Campaigns list!
+
 ### Campaign Failed to Send?
 
 Failed campaigns will display:
