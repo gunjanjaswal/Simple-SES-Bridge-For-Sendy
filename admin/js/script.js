@@ -449,7 +449,7 @@ jQuery(document).ready(function ($) {
                     </tr>
                     <tr>
                         <td style="padding:12px; text-align:center; vertical-align: top;" valign="top">
-                            <h3 style="font-size:15px; margin:0 0 ${settings.show_article_excerpt == '1' ? '6px' : '10px'}; color:#0f172a; line-height: 1.3;"><a href="${post.link}" style="color:#0f172a; text-decoration:none;">${post.title}</a></h3>
+                            <h3 style="font-size:15px; margin:0 0 ${settings.show_article_excerpt == '1' ? '6px' : '10px'}; color:#0f172a; line-height: 1.3; min-height: 40px;"><a href="${post.link}" style="color:#0f172a; text-decoration:none;">${post.title}</a></h3>
                             ${settings.show_article_excerpt == '1' && post.excerpt ? `<p style="font-size:12px; color:#475569; line-height:1.4; margin:0 0 10px;">${post.excerpt}...</p>` : ''}
 
                             <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="margin:auto;">
