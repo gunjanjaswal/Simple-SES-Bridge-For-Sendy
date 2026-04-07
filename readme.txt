@@ -3,7 +3,7 @@ Contributors: gunjanjaswal
 Tags: sendy, newsletter, email, amazon-ses, marketing
 Requires at least: 5.8
 Tested up to: 6.9
-Stable tag: 1.5.0
+Stable tag: 1.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,11 +16,15 @@ Create beautiful, responsive newsletters for Sendy with a visual builder. Hero +
 ### 🚀 Key Features
 
 *   **🎨 Visual Newsletter Builder:** Drag-and-drop workflow to build emails in seconds.
-*   **📱 Fully Responsive Layout:** 
-    *   **Hero Section:** Highlights your feature story with a robust, integrated banner.
+*   **📨 Two Newsletter Formats:** Pick a format per campaign on the Create Newsletter page.
+    *   **🗞️ The Roundup** — visual hero + 2-column story grid for your subscribers. Uses the Custom Footer Text box.
+    *   **✉️ The Insider Brief** — personal greeting, intro, centered hero with featured image, "What Else We're Seeing" 2-column grid, "Why this matters" callout, collaboration CTA, and a centered About Us block. Built for media pitches & partner updates. All copy editable from Settings → "The Insider Brief — Template Texts".
+*   **📋 Auto-Fetched Lists with Subscriber Counts:** Lists & segments are pulled from Sendy via `get-lists.php` and shown as checkboxes with active subscriber counts. Cached for 10 minutes with a one-click refresh link. The plugin remembers which lists you sent your last campaign to and pre-checks them next time.
+*   **📱 Fully Responsive Layout:**
+    *   **Hero Section:** Highlights your feature story with a robust, integrated banner. Falls back to the hero post's featured image if no banner is uploaded.
     *   **Grid System:** Responsive design that displays **2 columns on Desktop** and stacks to a **single column on Mobile** for perfect readability.
     *   **Auto-Height Cards:** Eliminates ugly whitespace on diverse screen sizes (Desktop & Mobile).
-*   **🔍 Instant Post Search:** AJAX-powered search lets you find and add any post from your library instantly.
+*   **🔍 Infinite-Scroll Post Search:** AJAX-powered search loads posts in batches of 10 and keeps loading more as you scroll the results list.
 *   **🖼️ Smart Image Handling:** 
     *   Automatic usage of 'Large' thumbnails for crisp quality.
     *   **No-Crop Banners:** Banners display fully (`height: auto`) without cutting off text or faces.
@@ -97,6 +101,13 @@ This runs every 5 minutes to automatically process queued campaigns.
 3.  **Responsive Email:** See how the layout adapts perfectly from Desktop to Mobile.
 
 == Changelog ==
+
+= 1.5.2 =
+*   Fix: Infinite scroll in the "Add Posts" panel now actually triggers. The scroll handler was using event delegation which doesn't work for scroll events; it's now bound directly to the results container.
+
+= 1.5.1 =
+*   Improvement: "About Us" body in The Insider Brief footer block is now centered (heading was already centered).
+*   Cleanup: Removed all "Buy Me A Coffee" links and the Support card from the settings page, newsletter builder, plugin row meta, and readme files.
 
 = 1.5.0 =
 *   Feature: "Add Posts" panel now supports infinite scroll. Older posts load automatically as you scroll the results list (10 at a time).

@@ -1,6 +1,6 @@
 # 📧 Simple SES Bridge for Sendy
 
-![Version](https://img.shields.io/badge/version-1.5.0-blue.svg) ![WordPress](https://img.shields.io/badge/WordPress-5.8%2B-aaaaaa.svg) ![License](https://img.shields.io/badge/license-GPLv2-green.svg)
+![Version](https://img.shields.io/badge/version-1.5.2-blue.svg) ![WordPress](https://img.shields.io/badge/WordPress-5.8%2B-aaaaaa.svg) ![License](https://img.shields.io/badge/license-GPLv2-green.svg)
 
 **Connect WordPress to Sendy with style.**
 Create beautiful, responsive newsletters directly from your WordPress posts and send them via your Sendy installation (Amazon SES).
@@ -12,10 +12,11 @@ Create beautiful, responsive newsletters directly from your WordPress posts and 
 ### 🎨 Visual Newsletter Builder
 *   **Two Newsletter Formats — pick one per campaign:**
     *   **🗞️ The Roundup** — visual hero + 2-column story grid for your subscribers. Uses the "Custom Footer Text" highlighted box.
-    *   **✉️ The Insider Brief** — personal greeting, lead paragraph, **centered hero story with featured image**, **centered story cards** for "What Else We're Seeing" (with thumbnails + Read More buttons), "Why this matters" callout, and collaboration CTA. The highlighted box above the footer shows the **About Us** heading + body (left-aligned), replacing the Custom Footer Text used by The Roundup. Built for media pitches & partner updates.
+    *   **✉️ The Insider Brief** — personal greeting, lead paragraph, **centered hero story with featured image**, "What Else We're Seeing" stories rendered in the **same 2-column grid** as The Roundup, "Why this matters" callout, and collaboration CTA. The highlighted box above the footer shows a **centered About Us** heading + body, replacing the Custom Footer Text used by The Roundup. Built for media pitches & partner updates.
     *   Pick a format per-campaign on the Create Newsletter page (Design Settings → Newsletter Format).
     *   All Insider Brief copy is editable from *Settings → The Insider Brief — Template Texts*. Header and dark footer (logo, social, copyright, unsubscribe) are shared across both formats.
-*   **Drag-and-Drop Post Selection:** Search and add posts with a single click.
+*   **Infinite-Scroll Post Search:** The "Add Posts" panel loads posts in batches of 10 and keeps loading more as you scroll. Search resets the list.
+*   **Smart Hero Image:** The Roundup hero uses your uploaded banner if present, otherwise falls back to the hero post's featured image automatically.
 *   **Article Excerpts:** Optional setting to show short article text before the "Read More" button.
 *   **Live Preview:** See exactly what your email will look like as you build it.
 *   **Banner Upload:** Add custom hero banners via WordPress Media Library.
@@ -31,8 +32,9 @@ Create beautiful, responsive newsletters directly from your WordPress posts and 
 *   **High-Res Thumbnails:** Uses 'Large' image size for retina displays.
 
 ### 📧 Advanced Campaign Management
-*   **Auto-Fetched Lists:** Lists & segments are pulled automatically from Sendy (via `get-lists.php`) and shown as checkboxes on the Create Newsletter page — no manual List ID entry. Cached for 10 minutes with a one-click refresh link.
-*   **Multi-List Support:** Send to multiple Sendy lists with checkboxes (all selected by default).
+*   **Auto-Fetched Lists with Subscriber Counts:** Lists & segments are pulled automatically from Sendy (via `get-lists.php`) and shown as checkboxes with active subscriber counts next to each list. Cached for 10 minutes with a one-click refresh link.
+*   **Smart List Memory:** Lists default to unchecked, but the plugin remembers which lists you sent your last campaign to and pre-checks them next time.
+*   **Multi-List Support:** Send to multiple Sendy lists/segments at once.
 *   **Three Send Options:**
     *   **Save as Draft** - Create draft in Sendy for later editing
     *   **Send Immediately** - Send campaign right away
@@ -177,6 +179,13 @@ This automatically processes queued campaigns every 5 minutes.
 ---
  
  ## 📋 Changelog
+
+ ### v1.5.2
+ *   **Fix:** Infinite scroll in the "Add Posts" panel now actually triggers. The scroll handler was using event delegation (which doesn't work for scroll events); it's now bound directly to the results container.
+
+ ### v1.5.1
+ *   **Improvement:** "About Us" body in The Insider Brief footer block is now centered (heading was already centered).
+ *   **Cleanup:** Removed all "Buy Me A Coffee" links and the Support card from the settings page, newsletter builder, plugin row meta, and readme files.
 
  ### v1.5.0
  *   **Feature:** "Add Posts" panel now supports **infinite scroll** — older posts load automatically as you scroll the results list (10 at a time).
