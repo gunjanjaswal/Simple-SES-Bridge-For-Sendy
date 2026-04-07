@@ -97,18 +97,6 @@ class SSSB_Admin_Settings
         );
 
         add_settings_field(
-            'known_lists',
-            __('Saved Lists (Optional)', 'simple-ses-bridge-for-sendy'),
-            array($this, 'render_textarea_field'),
-            'simple_sendy_bridge',
-            'sssb_main_section',
-            array(
-                'field' => 'known_lists',
-                'desc' => __('Enter your lists one per line in the format: <strong>List Name, List ID</strong> (or use | separator)<br>Example:<br>Main Subscribers, l12345<br>All Lists|l12345,l67890', 'simple-ses-bridge-for-sendy')
-            )
-        );
-
-        add_settings_field(
             'trigger_cron',
             __('Auto-Trigger Cron', 'simple-ses-bridge-for-sendy'),
             array($this, 'render_checkbox_field'),
@@ -194,11 +182,7 @@ class SSSB_Admin_Settings
         if (isset($input['from_email'])) {
             $new_input['from_email'] = sanitize_email($input['from_email']);
         }
-        if (isset($input['known_lists'])) {
-            // Allow basic text, newlines, and pipes
-            $new_input['known_lists'] = wp_strip_all_tags($input['known_lists']);
-        }
-        if (isset($input['trigger_cron'])) {
+if (isset($input['trigger_cron'])) {
             $new_input['trigger_cron'] = '1';
         } else {
             $new_input['trigger_cron'] = '';

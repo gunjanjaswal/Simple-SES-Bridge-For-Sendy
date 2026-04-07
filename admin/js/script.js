@@ -3,15 +3,13 @@ jQuery(document).ready(function ($) {
     let bannerUrl = '';
     let layoutType = 'list';
 
-    // Load known lists if available
+    // Render Sendy lists fetched automatically by the server.
     const knownLists = sssb_ajax.known_lists || [];
+    const $listInput = $('#sssb-list-id');
+    const $listContainer = $listInput.parent();
+
     if (knownLists.length > 0) {
-        const $listInput = $('#sssb-list-id');
-        const $listContainer = $listInput.parent();
-
-        let listHtml = '<label><strong>Choose your lists & segments</strong></label><div class="sssb-list-checkboxes" style="max-height: 150px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; border-radius: 4px; background: #fff; margin-top:5px;">';
-
-        // Check all lists by default
+        let listHtml = '<div class="sssb-list-checkboxes" style="max-height: 200px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; border-radius: 4px; background: #fff; margin-top:5px;">';
         knownLists.forEach(list => {
             listHtml += `
                 <label style="display:block; margin-bottom: 5px;">
@@ -19,13 +17,10 @@ jQuery(document).ready(function ($) {
                 </label>
             `;
         });
-
         listHtml += '</div>';
-
-        // Hide original input but keep it for fallback/reference if needed
-        $listInput.hide();
-        $listContainer.find('label').first().hide(); // Hide original label
-        $listContainer.append(listHtml);
+        $listInput.after(listHtml);
+    } else {
+        $('#sssb-list-empty-notice').show();
     }
 
     // Banner Image Upload

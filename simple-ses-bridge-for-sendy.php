@@ -3,7 +3,7 @@
  * Plugin Name: Simple SES Bridge for Sendy
  * Plugin URI:  https://github.com/gunjanjaswal/Simple-SES-Bridge-for-Sendy
  * Description: Connects WordPress to Sendy (via Amazon SES) to create and send newsletters from your content.
- * Version:     1.0.0
+ * Version:     1.1.0
  * Author:      Gunjan Jaswal
  * Author URI:  https://gunjanjaswal.me
  * License:     GPL-2.0+
@@ -18,7 +18,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants.
-define('SSSB_VERSION', '1.0.0');
+define('SSSB_VERSION', '1.1.0');
 define('SSSB_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('SSSB_PLUGIN_URL', plugin_dir_url(__FILE__));
 
@@ -375,22 +375,14 @@ class SSSB_Core
         wp_enqueue_script('sssb-admin-script', SSSB_PLUGIN_URL . 'admin/js/script.js', array('jquery', 'jquery-ui-datepicker'), SSSB_VERSION, true);
 
         
-        $known_lists = array();
         $options = get_option('sssb_settings');
-        if (!empty($options['known_lists'])) {
-            $lines = explode("\n", $options['known_lists']);
-            foreach ($lines as $line) {
-                // Determine separator: pipe or comma
-                $separator = (strpos($line, '|') !== false) ? '|' : ',';
-                
-                $parts = explode($separator, $line);
-                if (count($parts) >= 2) {
-                    $known_lists[] = array(
-                        'name' => trim($parts[0]),
-                        'id' => trim($parts[1])
-                    );
-                }
-            }
+
+        // Auto-fetch lists from Sendy (cached). Allows force refresh via ?sssb_refresh_lists=1.
+        $known_lists = array();
+        if (class_exists('SSSB_Sendy_API')) {
+            $sendy_api  = new SSSB_Sendy_API();
+            $force      = isset($_GET['sssb_refresh_lists']);
+            $known_lists = $sendy_api->get_lists($force);
         }
         
         wp_localize_script('sssb-admin-script', 'sssb_ajax', array(

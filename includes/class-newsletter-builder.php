@@ -71,10 +71,22 @@ class SSSB_Newsletter_Builder
                         </p>
                         <p>
                             <label>
-                                <?php esc_html_e('List ID', 'simple-ses-bridge-for-sendy'); ?>
+                                <?php esc_html_e('Choose your lists & segments', 'simple-ses-bridge-for-sendy'); ?>
                             </label><br>
-                            <input type="text" id="sssb-list-id" class="widefat"
-                                value="<?php echo esc_attr($default_list_id); ?>">
+                            <input type="hidden" id="sssb-list-id" value="<?php echo esc_attr($default_list_id); ?>">
+                            <span id="sssb-list-empty-notice" class="description" style="display:none;">
+                                <?php
+                                $refresh_url = esc_url(add_query_arg('sssb_refresh_lists', '1'));
+                                printf(
+                                    /* translators: %s: refresh link */
+                                    esc_html__('No lists found. Check your Sendy URL, API Key and Brand ID in Settings, then %s.', 'simple-ses-bridge-for-sendy'),
+                                    '<a href="' . $refresh_url . '">' . esc_html__('refresh', 'simple-ses-bridge-for-sendy') . '</a>'
+                                );
+                                ?>
+                            </span>
+                            <span class="description" style="display:block; margin-top:5px;">
+                                <a href="<?php echo esc_url(add_query_arg('sssb_refresh_lists', '1')); ?>"><?php esc_html_e('Refresh lists from Sendy', 'simple-ses-bridge-for-sendy'); ?></a>
+                            </span>
                         </p>
                     </div>
 

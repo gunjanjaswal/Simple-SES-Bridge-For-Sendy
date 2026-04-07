@@ -91,6 +91,67 @@ class SSSB_Sendy_API
     }
 
     /**
+     * Fetch all lists from Sendy for the configured brand.
+     * Uses api/lists/get-lists.php (Sendy 4.x+).
+     * Results are cached in a transient for 10 minutes.
+     *
+     * @param bool $force_refresh Bypass cache if true.
+     * @return array Array of ['id' => ..., 'name' => ...]; empty array on failure.
+     */
+    public function get_lists($force_refresh = false)
+    {
+        if (empty($this->installation_url) || empty($this->api_key) || empty($this->brand_id)) {
+            return array();
+        }
+
+        $cache_key = 'sssb_lists_' . md5($this->installation_url . '|' . $this->brand_id);
+
+        if (!$force_refresh) {
+            $cached = get_transient($cache_key);
+            if (is_array($cached)) {
+                return $cached;
+            }
+        }
+
+        $endpoint = $this->installation_url . 'api/lists/get-lists.php';
+
+        $response = wp_remote_post($endpoint, array(
+            'body' => array(
+                'api_key'        => $this->api_key,
+                'brand_id'       => $this->brand_id,
+                'include_hidden' => 'no',
+            ),
+            'timeout'   => 20,
+            'sslverify' => false,
+        ));
+
+        if (is_wp_error($response)) {
+            return array();
+        }
+
+        $body = wp_remote_retrieve_body($response);
+        $data = json_decode($body, true);
+
+        $lists = array();
+        if (is_array($data)) {
+            foreach ($data as $item) {
+                if (isset($item['id']) && isset($item['name'])) {
+                    $lists[] = array(
+                        'id'   => (string) $item['id'],
+                        'name' => (string) $item['name'],
+                    );
+                }
+            }
+        }
+
+        if (!empty($lists)) {
+            set_transient($cache_key, $lists, 10 * MINUTE_IN_SECONDS);
+        }
+
+        return $lists;
+    }
+
+    /**
      * Get subscriber count (simple test method)
      */
     public function get_subscriber_count()

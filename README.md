@@ -1,6 +1,6 @@
 # 📧 Simple SES Bridge for Sendy
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue.svg) ![WordPress](https://img.shields.io/badge/WordPress-5.8%2B-aaaaaa.svg) ![License](https://img.shields.io/badge/license-GPLv2-green.svg)
+![Version](https://img.shields.io/badge/version-1.1.0-blue.svg) ![WordPress](https://img.shields.io/badge/WordPress-5.8%2B-aaaaaa.svg) ![License](https://img.shields.io/badge/license-GPLv2-green.svg)
 
 **Connect WordPress to Sendy with style.**
 Create beautiful, responsive newsletters directly from your WordPress posts and send them via your Sendy installation (Amazon SES).
@@ -28,6 +28,7 @@ Create beautiful, responsive newsletters directly from your WordPress posts and 
 *   **High-Res Thumbnails:** Uses 'Large' image size for retina displays.
 
 ### 📧 Advanced Campaign Management
+*   **Auto-Fetched Lists:** Lists & segments are pulled automatically from Sendy (via `get-lists.php`) and shown as checkboxes on the Create Newsletter page — no manual List ID entry. Cached for 10 minutes with a one-click refresh link.
 *   **Multi-List Support:** Send to multiple Sendy lists with checkboxes (all selected by default).
 *   **Three Send Options:**
     *   **Save as Draft** - Create draft in Sendy for later editing
@@ -79,7 +80,9 @@ Create beautiful, responsive newsletters directly from your WordPress posts and 
 4.  **Configure** your Sendy details in *Settings > Simple Sendy Bridge*:
     *   Sendy Installation URL
     *   API Key
-    *   Default List ID
+    *   Brand ID (required for auto-fetching lists)
+
+    Lists are fetched automatically from Sendy and appear as checkboxes on the Create Newsletter page — you no longer need to enter List IDs manually.
 
 ## 📖 Usage
 
@@ -171,7 +174,14 @@ This automatically processes queued campaigns every 5 minutes.
 ---
  
  ## 📋 Changelog
- 
+
+ ### v1.1.0
+ *   **Feature:** Auto-fetch lists & segments directly from Sendy via `api/lists/get-lists.php` (requires Brand ID).
+ *   **Feature:** "Choose your lists & segments" checkboxes populate automatically on the Create Newsletter page.
+ *   **Feature:** Fetched lists cached for 10 minutes; "Refresh lists from Sendy" link forces a refresh.
+ *   **Change:** Removed the manual "Saved Lists (Optional)" setting.
+ *   **Change:** Replaced the manual List ID text input with the auto-populated list selector.
+
  ### v1.0.0
  *   **Initial Release**
  *   **Feature:** Visual Newsletter Builder with drag-and-drop.

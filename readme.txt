@@ -3,7 +3,7 @@ Contributors: gunjanjaswal
 Tags: sendy, newsletter, email, amazon-ses, marketing
 Requires at least: 5.8
 Tested up to: 6.9
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://buymeacoffee.com/gunjanjaswal
@@ -49,7 +49,7 @@ Newsletter, Sendy, Amazon SES, Email Marketing, Post to Email, Visual Builder, D
 
 1.  Upload the plugin files to the `/wp-content/plugins/simple-ses-bridge-for-sendy` directory, or install the plugin through the WordPress plugins screen directly.
 2.  Activate the plugin through the 'Plugins' screen in WordPress.
-3.  Navigate to **Settings > Simple Sendy Bridge** to configure your Sendy options (URL, API Key, List ID).
+3.  Navigate to **Settings > Simple Sendy Bridge** to configure your Sendy options (URL, API Key, Brand ID). Lists are fetched automatically from Sendy — no need to enter List IDs manually.
 4.  Go to **Simple Sendy Bridge > Create Newsletter** to start building!
 
 == Frequently Asked Questions ==
@@ -98,6 +98,13 @@ This runs every 5 minutes to automatically process queued campaigns.
 3.  **Responsive Email:** See how the layout adapts perfectly from Desktop to Mobile.
 
 == Changelog ==
+
+= 1.1.0 =
+*   Feature: Lists & segments are now fetched automatically from Sendy using the `get-lists.php` API (requires Brand ID).
+*   Feature: "Choose your lists & segments" checkboxes are populated directly on the Create Newsletter page.
+*   Feature: Fetched lists are cached for 10 minutes; use the "Refresh lists from Sendy" link to force an update.
+*   Change: Removed the manual "Saved Lists (Optional)" setting — no more copy/pasting list names and IDs.
+*   Change: The "List ID" text input on the newsletter builder has been replaced by the auto-populated list selector.
 
 = 1.0.0 =
 *   Initial Release.
