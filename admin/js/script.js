@@ -95,8 +95,9 @@ jQuery(document).ready(function ($) {
         loadPosts(query, 1, false);
     });
 
-    // Infinite scroll inside the results container
-    $(document).on('scroll', '#sssb-post-results', function () {
+    // Infinite scroll inside the results container.
+    // Scroll events don't bubble, so bind directly (not via delegation).
+    $('#sssb-post-results').on('scroll', function () {
         if (isLoadingPosts || !hasMorePosts) return;
         const el = this;
         if (el.scrollTop + el.clientHeight >= el.scrollHeight - 80) {
