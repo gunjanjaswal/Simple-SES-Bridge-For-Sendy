@@ -3,7 +3,7 @@ Contributors: gunjanjaswal
 Tags: sendy, newsletter, email, amazon-ses, marketing
 Requires at least: 5.8
 Tested up to: 6.9
-Stable tag: 1.3.0
+Stable tag: 1.5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://buymeacoffee.com/gunjanjaswal
@@ -98,6 +98,24 @@ This runs every 5 minutes to automatically process queued campaigns.
 3.  **Responsive Email:** See how the layout adapts perfectly from Desktop to Mobile.
 
 == Changelog ==
+
+= 1.5.0 =
+*   Feature: "Add Posts" panel now supports infinite scroll. Older posts load automatically as you scroll the results list (10 at a time).
+*   Internal: `sssb_search_posts` AJAX endpoint now accepts a `page` parameter and returns `{ posts, page, has_more }`.
+
+= 1.4.1 =
+*   Improvement: "What Else We're Seeing" stories in The Insider Brief now use the same 2-column responsive grid as The Roundup.
+*   Improvement: "About Us" heading in The Insider Brief footer block is now centered.
+
+= 1.4.0 =
+*   Fix: Bumped plugin version so the updated `script.js` is force-reloaded by browsers (cache bust). All 1.3.1 layout improvements now actually take effect.
+*   Improvement: "The Roundup" hero now also pulls in the post's featured image when no banner is uploaded.
+
+= 1.3.1 =
+*   Improvement: "The Insider Brief" hero story is now centered and pulls in the post's featured image, with a centered "Read More" button.
+*   Improvement: "What Else We're Seeing" stories render as individual centered cards (instead of a bulleted list) with featured images, centered titles & excerpts, and a centered "Read More" button.
+*   Change: In "The Insider Brief" the highlighted box above the dark footer now shows the "About Us" heading + body (replacing the Custom Footer Text used by The Roundup). Same box styling, but the heading is left-aligned.
+*   UI: Design Settings card moved to the top of the Create Newsletter page, with "Newsletter Format" as the first field above Banner Image.
 
 = 1.3.0 =
 *   Feature: New "The Insider Brief" newsletter template — a personal pitch format with greeting, intro, hero story, "Why this matters" callout, collaboration CTA and About Us section. Ideal for media outreach & partner updates.

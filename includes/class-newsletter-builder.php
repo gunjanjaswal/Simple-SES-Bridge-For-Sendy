@@ -236,40 +236,42 @@ class SSSB_Newsletter_Builder
             wp_send_json_error('Permission denied');
         }
 
-        $query = isset($_POST['query']) ? sanitize_text_field(wp_unslash($_POST['query'])) : '';
+        $query    = isset($_POST['query']) ? sanitize_text_field(wp_unslash($_POST['query'])) : '';
+        $page     = isset($_POST['page']) ? max(1, (int) $_POST['page']) : 1;
+        $per_page = 10;
 
         $args = array(
-            'post_type' => 'post',
-            'post_status' => 'publish',
-            'posts_per_page' => 10,
+            'post_type'      => 'post',
+            'post_status'    => 'publish',
+            'posts_per_page' => $per_page,
+            'paged'          => $page,
         );
 
         if (!empty($query)) {
             $args['s'] = $query;
         }
 
-        $posts = get_posts($args);
+        $wp_query = new WP_Query($args);
         $data = array();
 
-        foreach ($posts as $post) {
-            $thumb_id = get_post_thumbnail_id($post->ID);
+        foreach ($wp_query->posts as $post) {
+            $thumb_id  = get_post_thumbnail_id($post->ID);
             $thumb_url = $thumb_id ? wp_get_attachment_image_url($thumb_id, 'large') : '';
 
-            // Fallback if no thumb
-            if (empty($thumb_url))
-                $thumb_url = ''; // Let frontend handle empty state or use a local asset
-
-
             $data[] = array(
-                'id' => $post->ID,
-                'title' => get_the_title($post->ID),
+                'id'        => $post->ID,
+                'title'     => get_the_title($post->ID),
                 'thumbnail' => $thumb_url,
-                'excerpt' => wp_trim_words($post->post_excerpt ? $post->post_excerpt : strip_shortcodes($post->post_content), 20),
-                'link' => get_permalink($post->ID),
+                'excerpt'   => wp_trim_words($post->post_excerpt ? $post->post_excerpt : strip_shortcodes($post->post_content), 20),
+                'link'      => get_permalink($post->ID),
             );
         }
 
-        wp_send_json_success($data);
+        wp_send_json_success(array(
+            'posts'    => $data,
+            'page'     => $page,
+            'has_more' => $page < (int) $wp_query->max_num_pages,
+        ));
     }
 
     public function ajax_create_campaign()

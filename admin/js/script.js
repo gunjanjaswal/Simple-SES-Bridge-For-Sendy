@@ -80,11 +80,28 @@ jQuery(document).ready(function ($) {
     });
 
     // Search Posts
+    let currentQuery = '';
+    let currentPage = 1;
+    let hasMorePosts = true;
+    let isLoadingPosts = false;
+
     $('#sssb-search').on('input', function () {
         const query = $(this).val();
         // Allow empty query to reset to recent posts, otherwise wait for 3 chars
         if (query.length > 0 && query.length < 3) return;
-        loadPosts(query);
+        currentQuery = query;
+        currentPage = 1;
+        hasMorePosts = true;
+        loadPosts(query, 1, false);
+    });
+
+    // Infinite scroll inside the results container
+    $(document).on('scroll', '#sssb-post-results', function () {
+        if (isLoadingPosts || !hasMorePosts) return;
+        const el = this;
+        if (el.scrollTop + el.clientHeight >= el.scrollHeight - 80) {
+            loadPosts(currentQuery, currentPage + 1, true);
+        }
     });
 
     // Add Post to selection
@@ -254,6 +271,32 @@ jQuery(document).ready(function ($) {
         });
     });
 
+    function postItemHtml(post) {
+        const isSelected = selectedPosts.some(p => p.id === post.id);
+        const btnHtml = isSelected
+            ? `<button class="button button-link-delete sssb-remove-post-from-search" data-id="${post.id}">Remove</button>`
+            : `<button class="button button-small sssb-add-post"
+                                data-id="${post.id}"
+                                data-title="${post.title}"
+                                data-thumbnail="${post.thumbnail}"
+                                data-excerpt="${post.excerpt}"
+                                data-link="${post.link}">Add</button>`;
+        return `
+            <div class="sssb-post-item" style="display:flex; align-items:center; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:10px;">
+                <img src="${post.thumbnail}" alt="" style="width:50px; height:50px; object-fit:cover; margin-right:10px; border-radius:4px;">
+                <div style="flex-grow:1;">
+                    <strong>${post.title}</strong>
+                    <div style="margin-top:5px;">${btnHtml}</div>
+                </div>
+            </div>`;
+    }
+
+    function appendPostList(posts) {
+        if (!posts || posts.length === 0) return;
+        const html = posts.map(postItemHtml).join('');
+        $('#sssb-post-results').append(html);
+    }
+
     function renderPostList(posts) {
         let html = '';
         if (posts.length === 0) {
@@ -266,10 +309,10 @@ jQuery(document).ready(function ($) {
                 if (isSelected) {
                     btnHtml = `<button class="button button-link-delete sssb-remove-post-from-search" data-id="${post.id}">Remove</button>`;
                 } else {
-                    btnHtml = `<button class="button button-small sssb-add-post" 
-                                data-id="${post.id}" 
-                                data-title="${post.title}" 
-                                data-thumbnail="${post.thumbnail}" 
+                    btnHtml = `<button class="button button-small sssb-add-post"
+                                data-id="${post.id}"
+                                data-title="${post.title}"
+                                data-thumbnail="${post.thumbnail}"
                                 data-excerpt="${post.excerpt}"
                                 data-link="${post.link}">Add</button>`;
                 }
@@ -354,7 +397,7 @@ jQuery(document).ready(function ($) {
             html += `
             <div style="padding: 26px 30px;">
                 <div style="background-color: #ffffff; border-radius: 12px; border: 1px solid #e5e7eb; text-align: center;">
-                    ${currentBanner ? `<a href="${heroPost.link}" style="text-decoration:none;"><img src="${currentBanner}" style="width: 100%; height: auto; display: block; border-top-left-radius: 12px; border-top-right-radius: 12px;" /></a>` : ''}
+                    ${(currentBanner || heroPost.thumbnail) ? `<a href="${heroPost.link}" style="text-decoration:none;"><img src="${currentBanner || heroPost.thumbnail}" style="width: 100%; height: auto; display: block; border-top-left-radius: 12px; border-top-right-radius: 12px;" /></a>` : ''}
                     <div style="padding: 22px;">
                         <h2 style="margin-top: 0; margin-bottom: ${settings.show_article_excerpt == '1' ? '12px' : '20px'}; color: #0f172a; text-align: center;">${heroPost.title}</h2>
                         ${settings.show_article_excerpt == '1' && heroPost.excerpt ? `<p style="color: #475569; font-size: 15px; line-height: 1.6; text-align: center; margin-top: 0; margin-bottom: 22px;">${heroPost.excerpt}...</p>` : ''}
@@ -428,7 +471,7 @@ jQuery(document).ready(function ($) {
             if (aboutHeading || aboutBody) {
                 html += `
                  <div style="padding: 20px 30px; text-align: left; background-color: #f8fafc; border-top: 1px solid #e2e8f0;">
-                     ${aboutHeading ? `<h3 style="margin:0 0 8px; color:#0f172a; font-size:16px; text-align:left;">${aboutHeading}</h3>` : ''}
+                     ${aboutHeading ? `<h3 style="margin:0 0 8px; color:#0f172a; font-size:16px; text-align:center;">${aboutHeading}</h3>` : ''}
                      <div style="font-size: 14px; color: #475569; line-height: 1.6;">
                          ${aboutBody}
                      </div>
@@ -517,27 +560,23 @@ jQuery(document).ready(function ($) {
             </div>`;
         }
 
-        // "What else" / other stories — centered cards with featured images
+        // "What else" / other stories — same 2-column grid as The Roundup
         if (otherPosts.length > 0) {
             if (settings.editorial_grid_heading) {
                 html += `<h3 style="margin:24px 0 16px; color:#0f172a; font-size:18px; text-align:center;">${settings.editorial_grid_heading}</h3>`;
             }
-            otherPosts.forEach(post => {
-                const thumb = post.thumbnail
-                    ? `<a href="${post.link}" style="text-decoration:none; display:block;"><img src="${post.thumbnail}" alt="" style="width:100%; height:auto; display:block; border-radius:10px; margin-bottom:14px;" /></a>`
-                    : '';
-                html += `
-                <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:18px; margin-bottom:18px; text-align:center;">
-                    ${thumb}
-                    <h4 style="margin:0 0 8px; color:#0f172a; font-size:16px; text-align:center;"><a href="${post.link}" style="color:#0f172a; text-decoration:none;">${post.title}</a></h4>
-                    ${post.excerpt ? `<p style="margin:0 0 14px; color:#64748b; font-size:13px; text-align:center;">${post.excerpt}...</p>` : ''}
-                    <table border="0" cellpadding="0" cellspacing="0" style="margin:auto;">
-                        <tr><td style="background:#0f172a; border-radius:6px; padding:8px 18px; text-align:center;">
-                            <a href="${post.link}" style="color:#ffffff !important; font-size:13px; text-decoration:none; display:block; font-weight:600;">Read More</a>
-                        </td></tr>
-                    </table>
-                </div>`;
-            });
+            html += `<table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:8px;">`;
+            for (let i = 0; i < otherPosts.length; i += 2) {
+                html += `<tr>`;
+                html += renderGridItem(otherPosts[i]);
+                if (i + 1 < otherPosts.length) {
+                    html += renderGridItem(otherPosts[i + 1]);
+                } else {
+                    html += `<td width="50%"></td>`;
+                }
+                html += `</tr>`;
+            }
+            html += `</table>`;
         }
 
         // Why this matters
@@ -609,21 +648,46 @@ jQuery(document).ready(function ($) {
 
 
     // Initial load of posts
-    loadPosts();
+    loadPosts('', 1, false);
 
-    function loadPosts(query = '') {
+    function loadPosts(query, page, append) {
+        if (isLoadingPosts) return;
+        isLoadingPosts = true;
+
+        if (!append) {
+            $('#sssb-post-results').html('<p style="padding:10px; color:#64748b;">Loading…</p>');
+        } else {
+            $('#sssb-post-results').append('<p class="sssb-loading-more" style="padding:10px; text-align:center; color:#64748b;">Loading more…</p>');
+        }
+
         $.ajax({
             url: sssb_ajax.ajax_url,
             type: 'POST',
             data: {
                 action: 'sssb_search_posts',
                 nonce: sssb_ajax.nonce,
-                query: query
+                query: query,
+                page: page
             },
             success: function (response) {
+                $('.sssb-loading-more').remove();
                 if (response.success) {
-                    renderPostList(response.data);
+                    const payload = response.data || {};
+                    const posts = payload.posts || [];
+                    hasMorePosts = !!payload.has_more;
+                    currentPage = payload.page || page;
+                    if (append) {
+                        appendPostList(posts);
+                    } else {
+                        renderPostList(posts);
+                    }
+                    if (!hasMorePosts && append) {
+                        $('#sssb-post-results').append('<p style="padding:10px; text-align:center; color:#94a3b8; font-size:12px;">No more posts</p>');
+                    }
                 }
+            },
+            complete: function () {
+                isLoadingPosts = false;
             }
         });
     }
