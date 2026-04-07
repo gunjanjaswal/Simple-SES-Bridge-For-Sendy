@@ -194,11 +194,6 @@ class SSSB_Newsletter_Builder
 
                     <div class="sssb-card">
                         <h3><?php esc_html_e('Support & Contact', 'simple-ses-bridge-for-sendy'); ?></h3>
-                        <p>
-                            <a href="https://buymeacoffee.com/gunjanjaswal" target="_blank" class="button" style="background-color: #FFDD00 !important; color: #000000 !important; border-color: #FFDD00 !important; font-weight: bold;">
-                                <?php esc_html_e('☕ Buy Me A Coffee', 'simple-ses-bridge-for-sendy'); ?>
-                            </a>
-                        </p>
                         <p style="margin-top:15px;">
                             <strong><?php esc_html_e('Email:', 'simple-ses-bridge-for-sendy'); ?></strong> <a
                                 href="mailto:hello@gunjanjaswal.me" style="color: #2271b1 !important; text-decoration: underline;">hello@gunjanjaswal.me</a><br>

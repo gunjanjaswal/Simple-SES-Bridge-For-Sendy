@@ -319,16 +319,6 @@ if (isset($input['trigger_cron'])) {
                 submit_button('Save Settings');
                 ?>
             </form>
-            
-            <div style="margin-top: 30px; border-top: 1px solid #ccc; padding-top: 20px;">
-                <h3><?php esc_html_e('Support', 'simple-ses-bridge-for-sendy'); ?></h3>
-                <p><?php esc_html_e('If you like this plugin, please consider buying me a coffee!', 'simple-ses-bridge-for-sendy'); ?></p>
-                <p>
-                    <a href="https://buymeacoffee.com/gunjanjaswal" target="_blank" class="button" style="background-color: #FFDD00 !important; color: #000000 !important; border-color: #FFDD00 !important; font-weight: bold;">
-                        <?php esc_html_e('☕ Buy Me A Coffee', 'simple-ses-bridge-for-sendy'); ?>
-                    </a>
-                </p>
-            </div>
         </div>
         <?php
     }

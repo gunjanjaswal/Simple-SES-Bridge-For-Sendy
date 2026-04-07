@@ -3,7 +3,7 @@
  * Plugin Name: Simple SES Bridge for Sendy
  * Plugin URI:  https://github.com/gunjanjaswal/Simple-SES-Bridge-for-Sendy
  * Description: Connects WordPress to Sendy (via Amazon SES) to create and send newsletters from your content.
- * Version:     1.5.0
+ * Version:     1.5.1
  * Author:      Gunjan Jaswal
  * Author URI:  https://gunjanjaswal.me
  * License:     GPL-2.0+
@@ -18,7 +18,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants.
-define('SSSB_VERSION', '1.5.0');
+define('SSSB_VERSION', '1.5.1');
 define('SSSB_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('SSSB_PLUGIN_URL', plugin_dir_url(__FILE__));
 
@@ -423,19 +423,6 @@ function sssb_init()
     return SSSB_Core::get_instance();
 }
 add_action('plugins_loaded', 'sssb_init');
-
-// Add Buy Me A Coffee link to plugin row meta
-add_filter('plugin_row_meta', 'sssb_plugin_row_meta', 10, 2);
-function sssb_plugin_row_meta($links, $file)
-{
-    if (strpos($file, 'simple-ses-bridge-for-sendy.php') !== false) {
-        $new_links = array(
-            'buy_coffee' => '<a href="https://buymeacoffee.com/gunjanjaswal" target="_blank" style="color: #d35400; font-weight: bold;">☕ Buy me a coffee</a>'
-        );
-        $links = array_merge($links, $new_links);
-    }
-    return $links;
-}
 
 // Add Settings link to plugin action links
 add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'sssb_plugin_action_links');

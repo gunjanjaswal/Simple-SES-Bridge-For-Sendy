@@ -470,9 +470,9 @@ jQuery(document).ready(function ($) {
             const aboutBody    = settings.editorial_about_body || '';
             if (aboutHeading || aboutBody) {
                 html += `
-                 <div style="padding: 20px 30px; text-align: left; background-color: #f8fafc; border-top: 1px solid #e2e8f0;">
+                 <div style="padding: 20px 30px; text-align: center; background-color: #f8fafc; border-top: 1px solid #e2e8f0;">
                      ${aboutHeading ? `<h3 style="margin:0 0 8px; color:#0f172a; font-size:16px; text-align:center;">${aboutHeading}</h3>` : ''}
-                     <div style="font-size: 14px; color: #475569; line-height: 1.6;">
+                     <div style="font-size: 14px; color: #475569; line-height: 1.6; text-align:center;">
                          ${aboutBody}
                      </div>
                  </div>`;

@@ -230,4 +230,3 @@ This automatically processes queued campaigns every 5 minutes.
  ## 🤝 Support
 
 Created by **Gunjan Jaswal**.
-If you like this plugin, consider [Buying Me A Coffee ☕](https://buymeacoffee.com/gunjanjaswal).
