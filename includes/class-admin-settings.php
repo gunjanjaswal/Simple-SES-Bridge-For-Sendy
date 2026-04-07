@@ -148,6 +148,59 @@ class SSSB_Admin_Settings
         add_settings_field('sssb_social_linkedin', __('LinkedIn URL', 'simple-ses-bridge-for-sendy'), array($this, 'render_footer_field'), 'simple_sendy_bridge', 'sssb_footer_section', array('field' => 'sssb_social_linkedin'));
         add_settings_field('sssb_social_twitter', __('X (Twitter) URL', 'simple-ses-bridge-for-sendy'), array($this, 'render_footer_field'), 'simple_sendy_bridge', 'sssb_footer_section', array('field' => 'sssb_social_twitter'));
         add_settings_field('sssb_social_youtube', __('YouTube URL', 'simple-ses-bridge-for-sendy'), array($this, 'render_footer_field'), 'simple_sendy_bridge', 'sssb_footer_section', array('field' => 'sssb_social_youtube'));
+
+        // --- Editorial Format Texts ---
+
+        add_settings_section(
+            'sssb_editorial_section',
+            __('✉️ The Insider Brief — Template Texts', 'simple-ses-bridge-for-sendy'),
+            function () {
+                echo '<p>' . esc_html__('These texts power "The Insider Brief" newsletter format — a personal pitch with commentary for media & partners. Choose it on the Create Newsletter page. HTML is allowed.', 'simple-ses-bridge-for-sendy') . '</p>';
+            },
+            'simple_sendy_bridge'
+        );
+
+        $editorial_fields = array(
+            'sssb_editorial_greeting'        => array('label' => __('Greeting', 'simple-ses-bridge-for-sendy'),               'type' => 'text',     'desc' => __('e.g. "Hi [First Name],"', 'simple-ses-bridge-for-sendy')),
+            'sssb_editorial_intro'           => array('label' => __('Intro Paragraph', 'simple-ses-bridge-for-sendy'),         'type' => 'textarea', 'desc' => __('Lead paragraph shown above the hero story.', 'simple-ses-bridge-for-sendy')),
+            'sssb_editorial_hero_label'      => array('label' => __('Hero Section Label', 'simple-ses-bridge-for-sendy'),       'type' => 'text',     'desc' => __('Small label above the hero post (e.g. "Hero Story").', 'simple-ses-bridge-for-sendy')),
+            'sssb_editorial_grid_heading'    => array('label' => __('Grid Section Heading', 'simple-ses-bridge-for-sendy'),     'type' => 'text',     'desc' => __('e.g. "🔍 What Else We\'re Seeing"', 'simple-ses-bridge-for-sendy')),
+            'sssb_editorial_why_heading'     => array('label' => __('"Why This Matters" Heading', 'simple-ses-bridge-for-sendy'),'type' => 'text',     'desc' => ''),
+            'sssb_editorial_why_body'        => array('label' => __('"Why This Matters" Body', 'simple-ses-bridge-for-sendy'),  'type' => 'textarea', 'desc' => ''),
+            'sssb_editorial_collab_heading'  => array('label' => __('Collaboration Heading', 'simple-ses-bridge-for-sendy'),     'type' => 'text',     'desc' => __('e.g. "📩 For Media & Collaborations"', 'simple-ses-bridge-for-sendy')),
+            'sssb_editorial_collab_body'     => array('label' => __('Collaboration Body', 'simple-ses-bridge-for-sendy'),       'type' => 'textarea', 'desc' => __('HTML allowed. Use this for CTA bullets and contact info.', 'simple-ses-bridge-for-sendy')),
+            'sssb_editorial_about_heading'   => array('label' => __('About Us Heading', 'simple-ses-bridge-for-sendy'),         'type' => 'text',     'desc' => ''),
+            'sssb_editorial_about_body'      => array('label' => __('About Us Body', 'simple-ses-bridge-for-sendy'),            'type' => 'textarea', 'desc' => ''),
+        );
+
+        foreach ($editorial_fields as $key => $cfg) {
+            register_setting('sssb_settings_group', $key, 'wp_kses_post');
+            add_settings_field(
+                $key,
+                $cfg['label'],
+                array($this, 'render_editorial_field'),
+                'simple_sendy_bridge',
+                'sssb_editorial_section',
+                array('field' => $key, 'type' => $cfg['type'], 'desc' => $cfg['desc'])
+            );
+        }
+    }
+
+    public function render_editorial_field($args)
+    {
+        $field = $args['field'];
+        $type  = isset($args['type']) ? $args['type'] : 'text';
+        $desc  = isset($args['desc']) ? $args['desc'] : '';
+        $value = get_option($field, '');
+
+        if ($type === 'textarea') {
+            echo '<textarea name="' . esc_attr($field) . '" rows="4" cols="50" class="large-text">' . esc_textarea($value) . '</textarea>';
+        } else {
+            echo '<input type="text" name="' . esc_attr($field) . '" value="' . esc_attr($value) . '" class="regular-text">';
+        }
+        if ($desc) {
+            echo '<p class="description">' . wp_kses_post($desc) . '</p>';
+        }
     }
 
     public function render_footer_field($args) {

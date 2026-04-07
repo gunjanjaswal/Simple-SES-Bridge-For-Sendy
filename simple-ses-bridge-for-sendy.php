@@ -3,7 +3,7 @@
  * Plugin Name: Simple SES Bridge for Sendy
  * Plugin URI:  https://github.com/gunjanjaswal/Simple-SES-Bridge-for-Sendy
  * Description: Connects WordPress to Sendy (via Amazon SES) to create and send newsletters from your content.
- * Version:     1.1.0
+ * Version:     1.3.0
  * Author:      Gunjan Jaswal
  * Author URI:  https://gunjanjaswal.me
  * License:     GPL-2.0+
@@ -18,7 +18,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants.
-define('SSSB_VERSION', '1.1.0');
+define('SSSB_VERSION', '1.3.0');
 define('SSSB_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('SSSB_PLUGIN_URL', plugin_dir_url(__FILE__));
 
@@ -389,7 +389,8 @@ class SSSB_Core
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('sssb_newsletter_nonce'),
             'site_url' => home_url(),
-            'known_lists' => $known_lists,
+            'known_lists'      => $known_lists,
+            'remembered_lists' => array_values((array) get_option('sssb_remembered_lists', array())),
             'settings' => array(
                 'footer_logo' => get_option('sssb_footer_logo_url'),
                 'footer_copyright' => get_option('sssb_footer_copyright', '© {year} ' . get_bloginfo('name')),
@@ -400,6 +401,17 @@ class SSSB_Core
                 'social_youtube' => get_option('sssb_social_youtube'),
                 'footer_custom_text' => wp_kses_post(nl2br(get_option('sssb_footer_custom_text'))),
                 'show_article_excerpt' => isset($options['show_article_excerpt']) ? $options['show_article_excerpt'] : '',
+                // Editorial format texts (HTML allowed; newlines converted to <br>)
+                'editorial_greeting'       => wp_kses_post(nl2br(get_option('sssb_editorial_greeting', ''))),
+                'editorial_intro'          => wp_kses_post(nl2br(get_option('sssb_editorial_intro', ''))),
+                'editorial_hero_label'     => wp_kses_post(get_option('sssb_editorial_hero_label', '')),
+                'editorial_grid_heading'   => wp_kses_post(get_option('sssb_editorial_grid_heading', '')),
+                'editorial_why_heading'    => wp_kses_post(get_option('sssb_editorial_why_heading', '')),
+                'editorial_why_body'       => wp_kses_post(nl2br(get_option('sssb_editorial_why_body', ''))),
+                'editorial_collab_heading' => wp_kses_post(get_option('sssb_editorial_collab_heading', '')),
+                'editorial_collab_body'    => wp_kses_post(nl2br(get_option('sssb_editorial_collab_body', ''))),
+                'editorial_about_heading'  => wp_kses_post(get_option('sssb_editorial_about_heading', '')),
+                'editorial_about_body'     => wp_kses_post(nl2br(get_option('sssb_editorial_about_body', ''))),
             )
         ));
     }

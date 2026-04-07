@@ -136,9 +136,11 @@ class SSSB_Sendy_API
         if (is_array($data)) {
             foreach ($data as $item) {
                 if (isset($item['id']) && isset($item['name'])) {
+                    $list_id = (string) $item['id'];
                     $lists[] = array(
-                        'id'   => (string) $item['id'],
-                        'name' => (string) $item['name'],
+                        'id'    => $list_id,
+                        'name'  => (string) $item['name'],
+                        'count' => $this->fetch_subscriber_count($list_id),
                     );
                 }
             }
@@ -149,6 +151,33 @@ class SSSB_Sendy_API
         }
 
         return $lists;
+    }
+
+    /**
+     * Fetch active subscriber count for a specific list ID.
+     * Returns an integer, or null if the call fails / response isn't numeric.
+     */
+    private function fetch_subscriber_count($list_id)
+    {
+        if (empty($this->installation_url) || empty($this->api_key) || empty($list_id)) {
+            return null;
+        }
+
+        $response = wp_remote_post($this->installation_url . 'api/subscribers/active-subscriber-count.php', array(
+            'body' => array(
+                'api_key' => $this->api_key,
+                'list_id' => $list_id,
+            ),
+            'timeout'   => 15,
+            'sslverify' => false,
+        ));
+
+        if (is_wp_error($response)) {
+            return null;
+        }
+
+        $body = trim(wp_remote_retrieve_body($response));
+        return is_numeric($body) ? (int) $body : null;
     }
 
     /**

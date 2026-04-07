@@ -3,7 +3,7 @@ Contributors: gunjanjaswal
 Tags: sendy, newsletter, email, amazon-ses, marketing
 Requires at least: 5.8
 Tested up to: 6.9
-Stable tag: 1.1.0
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://buymeacoffee.com/gunjanjaswal
@@ -98,6 +98,17 @@ This runs every 5 minutes to automatically process queued campaigns.
 3.  **Responsive Email:** See how the layout adapts perfectly from Desktop to Mobile.
 
 == Changelog ==
+
+= 1.3.0 =
+*   Feature: New "The Insider Brief" newsletter template — a personal pitch format with greeting, intro, hero story, "Why this matters" callout, collaboration CTA and About Us section. Ideal for media outreach & partner updates.
+*   Feature: The original layout is now called "The Roundup" (hero + grid) — chosen on the Create Newsletter page via a "Newsletter Format" dropdown.
+*   Feature: All Insider Brief copy (greeting, intro, hero label, grid heading, "Why this matters", collaboration block, About Us) is editable from Settings → "The Insider Brief — Template Texts".
+*   Note: Header, footer and Custom Footer Text continue to render across both formats.
+
+= 1.2.0 =
+*   Feature: Active subscriber count is now displayed next to each list on the Create Newsletter page.
+*   Feature: Lists are unchecked by default. The plugin remembers which lists you sent your last campaign to and pre-checks them next time.
+*   Change: After every successful campaign creation (draft, send, or schedule), the selected list IDs are stored as the new default selection.
 
 = 1.1.0 =
 *   Feature: Lists & segments are now fetched automatically from Sendy using the `get-lists.php` API (requires Brand ID).

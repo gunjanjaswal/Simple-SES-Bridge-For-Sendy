@@ -1,19 +1,32 @@
 jQuery(document).ready(function ($) {
     const selectedPosts = [];
     let bannerUrl = '';
-    let layoutType = 'list';
+    let layoutType = 'custom';
 
     // Render Sendy lists fetched automatically by the server.
     const knownLists = sssb_ajax.known_lists || [];
+    const rememberedLists = (sssb_ajax.remembered_lists || []).map(String);
     const $listInput = $('#sssb-list-id');
-    const $listContainer = $listInput.parent();
+
+    const escapeHtml = (str) => String(str).replace(/[&<>"']/g, (c) => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+
+    const formatCount = (n) => {
+        if (n === null || n === undefined) return '';
+        return Number(n).toLocaleString();
+    };
 
     if (knownLists.length > 0) {
         let listHtml = '<div class="sssb-list-checkboxes" style="max-height: 200px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; border-radius: 4px; background: #fff; margin-top:5px;">';
         knownLists.forEach(list => {
+            const isChecked = rememberedLists.indexOf(String(list.id)) !== -1;
+            const countLabel = (list.count !== null && list.count !== undefined)
+                ? ` <span style="color:#646970;">(${formatCount(list.count)} subscribers)</span>`
+                : '';
             listHtml += `
                 <label style="display:block; margin-bottom: 5px;">
-                    <input type="checkbox" name="sssb_target_lists" value="${list.id}" checked> ${list.name}
+                    <input type="checkbox" name="sssb_target_lists" value="${escapeHtml(list.id)}"${isChecked ? ' checked' : ''}> ${escapeHtml(list.name)}${countLabel}
                 </label>
             `;
         });
@@ -56,8 +69,12 @@ jQuery(document).ready(function ($) {
         updatePreview();
     });
 
-    // Layout Change
+    // Layout / Format Change
     $('input[name="sssb_layout"]').on('change', function () {
+        layoutType = $(this).val();
+        updatePreview();
+    });
+    $('#sssb-format').on('change', function () {
         layoutType = $(this).val();
         updatePreview();
     });
@@ -321,10 +338,15 @@ jQuery(document).ready(function ($) {
         `;
 
         // 2. Banner (Integrated into Hero)
-        // 2. Banner (Integrated into Hero)
-        // Use a 1px transparent pixel as fallback if no banner selected, or handle in template
         const currentBanner = bannerUrl || '';
 
+        // BRANCH: editorial format renders its own body
+        if (layoutType === 'editorial') {
+            html += renderEditorialBody(currentBanner, settings);
+            html += renderFooter(settings);
+            $('#sssb-preview-content').html(html);
+            return;
+        }
 
         // 3. Hero Section
         if (selectedPosts.length > 0) {
@@ -389,7 +411,14 @@ jQuery(document).ready(function ($) {
            </div>`;
         }
 
-        // 5b. Custom Text Box (Highlighted)
+        html += renderFooter(settings);
+        $('#sssb-preview-content').html(html);
+    }
+
+    function renderFooter(settings) {
+        let html = '';
+
+        // Custom Text Box (Highlighted) — shared across all formats
         if (settings.footer_custom_text) {
             html += `
              <div style="padding: 20px 30px; text-align: center; background-color: #f8fafc; border-top: 1px solid #e2e8f0;">
@@ -399,8 +428,6 @@ jQuery(document).ready(function ($) {
              </div>`;
         }
 
-        // 6. Footer
-        // Ensure settings exist, use defaults to prevent 'loading' errors
         const footerLogo = settings.footer_logo || '';
         const copyright = (settings.footer_copyright || 'TheYouthTalks').replace(/{year}/g, new Date().getFullYear());
 
@@ -425,7 +452,100 @@ jQuery(document).ready(function ($) {
         </body>
         </html>`;
 
-        $('#sssb-preview-content').html(html);
+        return html;
+    }
+
+    function renderEditorialBody(currentBanner, settings) {
+        let html = '';
+        const heroPost = selectedPosts[0];
+        const otherPosts = selectedPosts.slice(1);
+
+        // Optional banner at the top of the card
+        if (currentBanner) {
+            html += `
+            <div style="padding: 26px 30px 0;">
+                <img src="${currentBanner}" style="width: 100%; height: auto; display: block; border-radius: 12px;" />
+            </div>`;
+        }
+
+        html += `<div style="padding: 26px 30px; color: #0f172a; font-size: 15px; line-height: 1.7;">`;
+
+        // Greeting
+        if (settings.editorial_greeting) {
+            html += `<p style="margin: 0 0 16px; font-weight: 600;">${settings.editorial_greeting}</p>`;
+        }
+
+        // Intro
+        if (settings.editorial_intro) {
+            html += `<div style="margin: 0 0 22px; color: #334155;">${settings.editorial_intro}</div>`;
+        }
+
+        // Hero story
+        if (heroPost) {
+            const heroLabel = settings.editorial_hero_label ? `<div style="font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: #64748b; margin-bottom: 8px;">${settings.editorial_hero_label}</div>` : '';
+            html += `
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:20px; margin-bottom:24px;">
+                ${heroLabel}
+                <h2 style="margin:0 0 10px; color:#0f172a; font-size:20px;"><a href="${heroPost.link}" style="color:#0f172a; text-decoration:none;">${heroPost.title}</a></h2>
+                ${heroPost.excerpt ? `<p style="margin:0 0 14px; color:#475569; font-size:14px;">${heroPost.excerpt}...</p>` : ''}
+                <a href="${heroPost.link}" style="display:inline-block; background:#0f172a; color:#ffffff !important; padding:10px 18px; border-radius:8px; text-decoration:none; font-size:13px; font-weight:600;">Read More</a>
+            </div>`;
+        }
+
+        // "What else" / grid heading + other stories
+        if (otherPosts.length > 0) {
+            if (settings.editorial_grid_heading) {
+                html += `<h3 style="margin:24px 0 12px; color:#0f172a; font-size:18px;">${settings.editorial_grid_heading}</h3>`;
+            }
+            html += `<ul style="padding-left: 18px; margin: 0 0 24px; color:#334155;">`;
+            otherPosts.forEach(post => {
+                html += `
+                <li style="margin-bottom:10px;">
+                    <a href="${post.link}" style="color:#0f172a; font-weight:600; text-decoration:none;">${post.title}</a>
+                    ${post.excerpt ? `<div style="color:#64748b; font-size:13px; margin-top:2px;">${post.excerpt}...</div>` : ''}
+                </li>`;
+            });
+            html += `</ul>`;
+        }
+
+        // Why this matters
+        if (settings.editorial_why_heading || settings.editorial_why_body) {
+            html += `<div style="margin: 24px 0; padding: 18px 20px; background:#fef9c3; border-left:4px solid #eab308; border-radius:8px;">`;
+            if (settings.editorial_why_heading) {
+                html += `<h3 style="margin:0 0 8px; color:#713f12; font-size:16px;">${settings.editorial_why_heading}</h3>`;
+            }
+            if (settings.editorial_why_body) {
+                html += `<div style="color:#713f12; font-size:14px; line-height:1.6;">${settings.editorial_why_body}</div>`;
+            }
+            html += `</div>`;
+        }
+
+        // Collaboration / CTA
+        if (settings.editorial_collab_heading || settings.editorial_collab_body) {
+            html += `<div style="margin: 24px 0; padding: 18px 20px; background:#ecfeff; border-left:4px solid #06b6d4; border-radius:8px;">`;
+            if (settings.editorial_collab_heading) {
+                html += `<h3 style="margin:0 0 8px; color:#155e75; font-size:16px;">${settings.editorial_collab_heading}</h3>`;
+            }
+            if (settings.editorial_collab_body) {
+                html += `<div style="color:#155e75; font-size:14px; line-height:1.6;">${settings.editorial_collab_body}</div>`;
+            }
+            html += `</div>`;
+        }
+
+        // About us
+        if (settings.editorial_about_heading || settings.editorial_about_body) {
+            html += `<div style="margin: 24px 0 0; padding-top: 18px; border-top: 1px solid #e2e8f0;">`;
+            if (settings.editorial_about_heading) {
+                html += `<h3 style="margin:0 0 8px; color:#0f172a; font-size:16px;">${settings.editorial_about_heading}</h3>`;
+            }
+            if (settings.editorial_about_body) {
+                html += `<div style="color:#475569; font-size:14px; line-height:1.6;">${settings.editorial_about_body}</div>`;
+            }
+            html += `</div>`;
+        }
+
+        html += `</div>`;
+        return html;
     }
 
     function renderGridItem(post) {

@@ -105,9 +105,20 @@ class SSSB_Newsletter_Builder
                         <div id="sssb-banner-preview" style="margin-top:10px; max-width:100%;"></div>
                         </p>
                         <p>
-                            <!-- Custom Template Enforced -->
-                             <input type="hidden" name="sssb_layout" value="custom">
-                             <span class="description"><?php esc_html_e('Using Custom Template (Hero + Grid)', 'simple-ses-bridge-for-sendy'); ?></span>
+                            <label><strong><?php esc_html_e('Newsletter Format', 'simple-ses-bridge-for-sendy'); ?></strong></label><br>
+                            <select id="sssb-format" name="sssb_format" class="widefat">
+                                <option value="custom"><?php esc_html_e('🗞️ The Roundup — hero story + grid layout for your readers', 'simple-ses-bridge-for-sendy'); ?></option>
+                                <option value="editorial"><?php esc_html_e('✉️ The Insider Brief — personal pitch with commentary for media & partners', 'simple-ses-bridge-for-sendy'); ?></option>
+                            </select>
+                            <span class="description" style="display:block; margin-top:5px;">
+                                <?php
+                                printf(
+                                    /* translators: %s: settings page link */
+                                    esc_html__('"The Insider Brief" texts (greeting, intro, "Why this matters" etc.) are pulled from %s.', 'simple-ses-bridge-for-sendy'),
+                                    '<a href="' . esc_url(admin_url('admin.php?page=simple_sendy_bridge')) . '">' . esc_html__('Settings → The Insider Brief Texts', 'simple-ses-bridge-for-sendy') . '</a>'
+                                );
+                                ?>
+                            </span>
                         </p>
                     </div>
 
@@ -297,7 +308,14 @@ class SSSB_Newsletter_Builder
         update_post_meta($post_id, '_sssb_from_email', sanitize_email($campaign_data['from_email']));
         update_post_meta($post_id, '_sssb_plain_text', sanitize_textarea_field($campaign_data['plain_text']));
         update_post_meta($post_id, '_sssb_list_id', sanitize_text_field($campaign_data['list_id']));
-        
+
+        // Remember which list IDs the user actually selected for this campaign,
+        // so they can be pre-checked next time the builder is opened.
+        $selected_ids = array_values(array_filter(array_map('trim', explode(',', (string) $campaign_data['list_id']))));
+        if (!empty($selected_ids)) {
+            update_option('sssb_remembered_lists', array_map('sanitize_text_field', $selected_ids));
+        }
+
         $send_type = $campaign_data['send_type'];
 
         if ($send_type === 'schedule') {

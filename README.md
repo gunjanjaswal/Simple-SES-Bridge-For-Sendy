@@ -1,6 +1,6 @@
 # 📧 Simple SES Bridge for Sendy
 
-![Version](https://img.shields.io/badge/version-1.1.0-blue.svg) ![WordPress](https://img.shields.io/badge/WordPress-5.8%2B-aaaaaa.svg) ![License](https://img.shields.io/badge/license-GPLv2-green.svg)
+![Version](https://img.shields.io/badge/version-1.3.0-blue.svg) ![WordPress](https://img.shields.io/badge/WordPress-5.8%2B-aaaaaa.svg) ![License](https://img.shields.io/badge/license-GPLv2-green.svg)
 
 **Connect WordPress to Sendy with style.**
 Create beautiful, responsive newsletters directly from your WordPress posts and send them via your Sendy installation (Amazon SES).
@@ -10,9 +10,11 @@ Create beautiful, responsive newsletters directly from your WordPress posts and 
 ## ✨ Features
 
 ### 🎨 Visual Newsletter Builder
+*   **Two Newsletter Formats — pick one per campaign:**
+    *   **🗞️ The Roundup** — visual hero + 2-column story grid for your subscribers.
+    *   **✉️ The Insider Brief** — personal greeting, lead paragraph, hero story, "Why this matters" callout, collaboration CTA and About Us. Built for media pitches & partner updates.
+    *   All Insider Brief copy is editable from *Settings → The Insider Brief — Template Texts*. Header, footer and Custom Footer Text are shared across both formats.
 *   **Drag-and-Drop Post Selection:** Search and add posts with a single click.
-*   **Hero + Grid Layout:** First post displays as a featured "Hero" card, subsequent posts in a **2-column grid** (desktop).
-*   **Two Layout Options:** Choose between List view (single column) or Grid view (2-column).
 *   **Article Excerpts:** Optional setting to show short article text before the "Read More" button.
 *   **Live Preview:** See exactly what your email will look like as you build it.
 *   **Banner Upload:** Add custom hero banners via WordPress Media Library.
@@ -174,6 +176,17 @@ This automatically processes queued campaigns every 5 minutes.
 ---
  
  ## 📋 Changelog
+
+ ### v1.3.0
+ *   **Feature:** New **"The Insider Brief"** newsletter template — personal greeting + intro + hero story + "Why this matters" callout + collaboration CTA + About Us. Built for media pitches and partner updates.
+ *   **Feature:** Original layout renamed to **"The Roundup"** (hero + grid). Pick a format per-campaign on the Create Newsletter page.
+ *   **Feature:** All Insider Brief text blocks are editable from *Settings → The Insider Brief — Template Texts*.
+ *   **Note:** Header, footer and Custom Footer Text continue to render across both formats.
+
+ ### v1.2.0
+ *   **Feature:** Active subscriber count shown next to each list on the Create Newsletter page.
+ *   **Feature:** Lists are unchecked by default; the plugin remembers your last selection and pre-checks those lists next time.
+ *   **Change:** Selected list IDs are persisted on every successful campaign (draft / send / schedule).
 
  ### v1.1.0
  *   **Feature:** Auto-fetch lists & segments directly from Sendy via `api/lists/get-lists.php` (requires Brand ID).
