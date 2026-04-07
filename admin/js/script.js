@@ -343,7 +343,7 @@ jQuery(document).ready(function ($) {
         // BRANCH: editorial format renders its own body
         if (layoutType === 'editorial') {
             html += renderEditorialBody(currentBanner, settings);
-            html += renderFooter(settings);
+            html += renderFooter(settings, 'editorial');
             $('#sssb-preview-content').html(html);
             return;
         }
@@ -411,15 +411,30 @@ jQuery(document).ready(function ($) {
            </div>`;
         }
 
-        html += renderFooter(settings);
+        html += renderFooter(settings, 'custom');
         $('#sssb-preview-content').html(html);
     }
 
-    function renderFooter(settings) {
+    function renderFooter(settings, format) {
         let html = '';
 
-        // Custom Text Box (Highlighted) — shared across all formats
-        if (settings.footer_custom_text) {
+        // Highlighted box above the dark footer.
+        // - Default formats: shows "Custom Footer Text" (centered, as before).
+        // - Editorial format: shows the About Us heading + body in the same box,
+        //   but left-aligned (heading not centered) per request.
+        if (format === 'editorial') {
+            const aboutHeading = settings.editorial_about_heading || '';
+            const aboutBody    = settings.editorial_about_body || '';
+            if (aboutHeading || aboutBody) {
+                html += `
+                 <div style="padding: 20px 30px; text-align: left; background-color: #f8fafc; border-top: 1px solid #e2e8f0;">
+                     ${aboutHeading ? `<h3 style="margin:0 0 8px; color:#0f172a; font-size:16px; text-align:left;">${aboutHeading}</h3>` : ''}
+                     <div style="font-size: 14px; color: #475569; line-height: 1.6;">
+                         ${aboutBody}
+                     </div>
+                 </div>`;
+            }
+        } else if (settings.footer_custom_text) {
             html += `
              <div style="padding: 20px 30px; text-align: center; background-color: #f8fafc; border-top: 1px solid #e2e8f0;">
                  <div style="font-size: 14px; color: #475569; line-height: 1.6;">
@@ -480,32 +495,49 @@ jQuery(document).ready(function ($) {
             html += `<div style="margin: 0 0 22px; color: #334155;">${settings.editorial_intro}</div>`;
         }
 
-        // Hero story
+        // Hero story (centered, with featured image)
         if (heroPost) {
-            const heroLabel = settings.editorial_hero_label ? `<div style="font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: #64748b; margin-bottom: 8px;">${settings.editorial_hero_label}</div>` : '';
+            const heroLabel = settings.editorial_hero_label
+                ? `<div style="font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: #64748b; margin-bottom: 10px; text-align:center;">${settings.editorial_hero_label}</div>`
+                : '';
+            const heroImage = heroPost.thumbnail
+                ? `<a href="${heroPost.link}" style="text-decoration:none; display:block;"><img src="${heroPost.thumbnail}" alt="" style="width:100%; height:auto; display:block; border-radius:10px; margin-bottom:16px;" /></a>`
+                : '';
             html += `
-            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:20px; margin-bottom:24px;">
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:20px; margin-bottom:24px; text-align:center;">
                 ${heroLabel}
-                <h2 style="margin:0 0 10px; color:#0f172a; font-size:20px;"><a href="${heroPost.link}" style="color:#0f172a; text-decoration:none;">${heroPost.title}</a></h2>
-                ${heroPost.excerpt ? `<p style="margin:0 0 14px; color:#475569; font-size:14px;">${heroPost.excerpt}...</p>` : ''}
-                <a href="${heroPost.link}" style="display:inline-block; background:#0f172a; color:#ffffff !important; padding:10px 18px; border-radius:8px; text-decoration:none; font-size:13px; font-weight:600;">Read More</a>
+                ${heroImage}
+                <h2 style="margin:0 0 10px; color:#0f172a; font-size:20px; text-align:center;"><a href="${heroPost.link}" style="color:#0f172a; text-decoration:none;">${heroPost.title}</a></h2>
+                ${heroPost.excerpt ? `<p style="margin:0 0 16px; color:#475569; font-size:14px; text-align:center;">${heroPost.excerpt}...</p>` : ''}
+                <table border="0" cellpadding="0" cellspacing="0" style="margin:auto;">
+                    <tr><td style="background:#0f172a; border-radius:8px; padding:10px 22px; text-align:center;">
+                        <a href="${heroPost.link}" style="color:#ffffff !important; font-size:13px; text-decoration:none; display:block; font-weight:600;">Read More</a>
+                    </td></tr>
+                </table>
             </div>`;
         }
 
-        // "What else" / grid heading + other stories
+        // "What else" / other stories — centered cards with featured images
         if (otherPosts.length > 0) {
             if (settings.editorial_grid_heading) {
-                html += `<h3 style="margin:24px 0 12px; color:#0f172a; font-size:18px;">${settings.editorial_grid_heading}</h3>`;
+                html += `<h3 style="margin:24px 0 16px; color:#0f172a; font-size:18px; text-align:center;">${settings.editorial_grid_heading}</h3>`;
             }
-            html += `<ul style="padding-left: 18px; margin: 0 0 24px; color:#334155;">`;
             otherPosts.forEach(post => {
+                const thumb = post.thumbnail
+                    ? `<a href="${post.link}" style="text-decoration:none; display:block;"><img src="${post.thumbnail}" alt="" style="width:100%; height:auto; display:block; border-radius:10px; margin-bottom:14px;" /></a>`
+                    : '';
                 html += `
-                <li style="margin-bottom:10px;">
-                    <a href="${post.link}" style="color:#0f172a; font-weight:600; text-decoration:none;">${post.title}</a>
-                    ${post.excerpt ? `<div style="color:#64748b; font-size:13px; margin-top:2px;">${post.excerpt}...</div>` : ''}
-                </li>`;
+                <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:18px; margin-bottom:18px; text-align:center;">
+                    ${thumb}
+                    <h4 style="margin:0 0 8px; color:#0f172a; font-size:16px; text-align:center;"><a href="${post.link}" style="color:#0f172a; text-decoration:none;">${post.title}</a></h4>
+                    ${post.excerpt ? `<p style="margin:0 0 14px; color:#64748b; font-size:13px; text-align:center;">${post.excerpt}...</p>` : ''}
+                    <table border="0" cellpadding="0" cellspacing="0" style="margin:auto;">
+                        <tr><td style="background:#0f172a; border-radius:6px; padding:8px 18px; text-align:center;">
+                            <a href="${post.link}" style="color:#ffffff !important; font-size:13px; text-decoration:none; display:block; font-weight:600;">Read More</a>
+                        </td></tr>
+                    </table>
+                </div>`;
             });
-            html += `</ul>`;
         }
 
         // Why this matters
@@ -532,17 +564,8 @@ jQuery(document).ready(function ($) {
             html += `</div>`;
         }
 
-        // About us
-        if (settings.editorial_about_heading || settings.editorial_about_body) {
-            html += `<div style="margin: 24px 0 0; padding-top: 18px; border-top: 1px solid #e2e8f0;">`;
-            if (settings.editorial_about_heading) {
-                html += `<h3 style="margin:0 0 8px; color:#0f172a; font-size:16px;">${settings.editorial_about_heading}</h3>`;
-            }
-            if (settings.editorial_about_body) {
-                html += `<div style="color:#475569; font-size:14px; line-height:1.6;">${settings.editorial_about_body}</div>`;
-            }
-            html += `</div>`;
-        }
+        // (About Us is now rendered inside renderFooter() for the editorial format,
+        //  in the same highlighted box that "Custom Footer Text" uses for The Roundup.)
 
         html += `</div>`;
         return html;

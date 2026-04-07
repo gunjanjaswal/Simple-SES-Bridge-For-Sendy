@@ -46,6 +46,36 @@ class SSSB_Newsletter_Builder
                 <!-- Left Column: Controls -->
                 <div class="sssb-col-left">
                     <div class="sssb-card">
+                        <h2><?php esc_html_e('Design Settings', 'simple-ses-bridge-for-sendy'); ?></h2>
+                        <p>
+                            <label><strong><?php esc_html_e('Newsletter Format', 'simple-ses-bridge-for-sendy'); ?></strong></label><br>
+                            <select id="sssb-format" name="sssb_format" class="widefat">
+                                <option value="custom"><?php esc_html_e('🗞️ The Roundup — hero story + grid layout for your readers', 'simple-ses-bridge-for-sendy'); ?></option>
+                                <option value="editorial"><?php esc_html_e('✉️ The Insider Brief — personal pitch with commentary for media & partners', 'simple-ses-bridge-for-sendy'); ?></option>
+                            </select>
+                            <span class="description" style="display:block; margin-top:5px;">
+                                <?php
+                                printf(
+                                    /* translators: %s: settings page link */
+                                    esc_html__('"The Insider Brief" texts (greeting, intro, "Why this matters" etc.) are pulled from %s.', 'simple-ses-bridge-for-sendy'),
+                                    '<a href="' . esc_url(admin_url('admin.php?page=simple_sendy_bridge')) . '">' . esc_html__('Settings → The Insider Brief Texts', 'simple-ses-bridge-for-sendy') . '</a>'
+                                );
+                                ?>
+                            </span>
+                        </p>
+                        <p>
+                            <label><strong><?php esc_html_e('Banner Image', 'simple-ses-bridge-for-sendy'); ?></strong></label><br>
+                            <button class="button" id="sssb-upload-banner"><?php esc_html_e('Select Banner', 'simple-ses-bridge-for-sendy'); ?></button>
+                            <button class="button hidden" id="sssb-remove-banner" style="display:none; color: #a00; border-color: #a00;"><?php esc_html_e('Remove', 'simple-ses-bridge-for-sendy'); ?></button>
+                        <p class="description" style="margin-top: 5px; color: #666; font-style: italic;">
+                            <?php esc_html_e('Recommended Size: 600px wide. Keep height under 200px for best results on mobile and desktop.', 'simple-ses-bridge-for-sendy'); ?>
+                        </p>
+                            <input type="hidden" id="sssb-banner-url">
+                            <div id="sssb-banner-preview" style="margin-top:10px; max-width:100%;"></div>
+                        </p>
+                    </div>
+
+                    <div class="sssb-card">
                         <h2>
                             <?php esc_html_e('Campaign Settings', 'simple-ses-bridge-for-sendy'); ?>
                         </h2>
@@ -86,38 +116,6 @@ class SSSB_Newsletter_Builder
                             </span>
                             <span class="description" style="display:block; margin-top:5px;">
                                 <a href="<?php echo esc_url(add_query_arg('sssb_refresh_lists', '1')); ?>"><?php esc_html_e('Refresh lists from Sendy', 'simple-ses-bridge-for-sendy'); ?></a>
-                            </span>
-                        </p>
-                    </div>
-
-                    <div class="sssb-card">
-                        <h2><?php esc_html_e('Design Settings', 'simple-ses-bridge-for-sendy'); ?></h2>
-                        <p>
-                            <label><strong><?php esc_html_e('Banner Image', 'simple-ses-bridge-for-sendy'); ?></strong></label><br>
-                            <button class="button"
-                                id="sssb-upload-banner"><?php esc_html_e('Select Banner', 'simple-ses-bridge-for-sendy'); ?></button>
-                            <button class="button hidden" id="sssb-remove-banner"
-                                style="display:none; color: #a00; border-color: #a00;"><?php esc_html_e('Remove', 'simple-ses-bridge-for-sendy'); ?></button>
-                        <p class="description" style="margin-top: 5px; color: #666; font-style: italic;">
-                            <?php esc_html_e('Recommended Size: 600px wide. Keep height under 200px for best results on mobile and desktop.', 'simple-ses-bridge-for-sendy'); ?>
-                        </p>
-                        <input type="hidden" id="sssb-banner-url">
-                        <div id="sssb-banner-preview" style="margin-top:10px; max-width:100%;"></div>
-                        </p>
-                        <p>
-                            <label><strong><?php esc_html_e('Newsletter Format', 'simple-ses-bridge-for-sendy'); ?></strong></label><br>
-                            <select id="sssb-format" name="sssb_format" class="widefat">
-                                <option value="custom"><?php esc_html_e('🗞️ The Roundup — hero story + grid layout for your readers', 'simple-ses-bridge-for-sendy'); ?></option>
-                                <option value="editorial"><?php esc_html_e('✉️ The Insider Brief — personal pitch with commentary for media & partners', 'simple-ses-bridge-for-sendy'); ?></option>
-                            </select>
-                            <span class="description" style="display:block; margin-top:5px;">
-                                <?php
-                                printf(
-                                    /* translators: %s: settings page link */
-                                    esc_html__('"The Insider Brief" texts (greeting, intro, "Why this matters" etc.) are pulled from %s.', 'simple-ses-bridge-for-sendy'),
-                                    '<a href="' . esc_url(admin_url('admin.php?page=simple_sendy_bridge')) . '">' . esc_html__('Settings → The Insider Brief Texts', 'simple-ses-bridge-for-sendy') . '</a>'
-                                );
-                                ?>
                             </span>
                         </p>
                     </div>
